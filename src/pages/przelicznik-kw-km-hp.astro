@@ -1,0 +1,81 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Formula from "../components/Formula.astro";
+import Sources from "../components/Sources.astro";
+import Limitations from "../components/Limitations.astro";
+import PowerConverter from "../components/PowerConverter";
+---
+<Layout
+  title="Przelicznik mocy kW ↔ KM ↔ HP — silniki elektryczne i spalinowe"
+  description="Przelicz kW na KM (koń mechaniczny) lub HP (mechanical horsepower). Wyjaśniona różnica między KM a HP. Tabela 0.37–110 kW."
+>
+  <article>
+    <div class="mb-6">
+      <div class="text-[12px] font-mono text-ink-400 mb-2">/ kalkulatory / kW ↔ KM ↔ HP</div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-ink-900 leading-tight mb-3">
+        Przelicznik kW ↔ KM ↔ HP
+      </h1>
+      <p class="text-[15px] text-ink-600 leading-relaxed max-w-3xl">
+        Konwerter trzech jednostek mocy z poprawnym rozróżnieniem KM (metric horsepower, europejski koń mechaniczny)
+        od HP (mechanical horsepower, amerykański). Większość kalkulatorów online myli te dwie jednostki.
+      </p>
+    </div>
+
+    <PowerConverter client:load />
+
+    <div class="prose-tech mt-10 max-w-3xl">
+      <h2>Definicje</h2>
+      <Formula label="Współczynniki przeliczeniowe">
+        <span class="num">1 KM</span> (metric, Europa) = <span class="num">735.49875</span> W
+        <br/><span class="num">1 HP</span> (mechanical, US) = <span class="num">745.69987</span> W
+        <br/><span class="num">1 HP</span> (electrical, rzadko używane) = <span class="num">746</span> W
+        <br/><span class="num">1 HP</span> (boiler, parowy) = <span class="num">9809.5</span> W
+      </Formula>
+
+      <h3>Skąd ta różnica</h3>
+      <p>
+        Pierwotna definicja Jamesa Watta (1782): koń podnosi 33 000 funtów na 1 stopę w ciągu minuty.
+        To dało wartość <strong>745.7 W</strong>, używaną dziś jako "HP" w krajach anglosaskich.
+      </p>
+      <p>
+        W krajach metrycznych XIX-wieczni inżynierowie zdefiniowali jednostkę na nowo: koń podnosi
+        75 kg na 1 metr w ciągu sekundy → <strong>735.5 W</strong>. To "KM" lub "PS" (Pferdestärke) w Niemczech,
+        "CV" (cheval-vapeur) we Francji.
+      </p>
+      <p>
+        Różnica wynosi około <strong>1.39%</strong>. Z punktu widzenia doboru silnika rzadko ma znaczenie,
+        ale w nazewnictwie technicznym i dokumentacji ważne jest poprawne rozróżnienie.
+      </p>
+
+      <h3>Jak rozpoznać która jednostka jest na tabliczce</h3>
+      <ul>
+        <li>Silniki produkcji <strong>europejskiej</strong> (Cantoni, Indukta, Besel, Tamel, ABB Brno, Siemens DE) — KM (735.5 W). Często oznaczane "PS" lub "CV".</li>
+        <li>Silniki produkcji <strong>amerykańskiej</strong> (Baldor, US Motors, Marathon) — HP (745.7 W).</li>
+        <li>Silniki <strong>chińskie</strong> — zwykle KM, ale bywają niespójności. Sprawdzaj kW jeśli jest podane.</li>
+        <li>Silniki <strong>spalinowe</strong> w samochodach — w EU norma WLTP używa kW; KM jest dopuszczalne pomocniczo. W USA HP.</li>
+      </ul>
+
+      <h3>Reguła praktyczna</h3>
+      <p>
+        Jeśli silnik ma podane <strong>obie</strong> wartości (kW i KM/HP) — kW jest zawsze miarodajne (jednostka SI).
+        Jeśli podana tylko jednostka koni, a producent europejski — przyjmij KM. Producent amerykański — HP.
+      </p>
+    </div>
+
+    <Limitations
+      items={[
+        "Kalkulator dotyczy mocy mechanicznej (na wale silnika). Nie należy mylić z mocą czynną pobieraną z sieci (większą o straty silnika).",
+        "Wartość koni z tabliczki silnika spalinowego (HP / KM) jest zwykle podana przy konkretnych obrotach. Maksymalna moc dostępna tylko w wąskim zakresie obrotów.",
+        "Dla silników elektrycznych moc znamionowa jest dostępna w pełnym zakresie pracy (poza obszarem osłabienia pola przy zasilaniu z falownika).",
+      ]}
+    />
+
+    <Sources
+      items={[
+        "BIPM SI Brochure, 9. wydanie — układ jednostek SI.",
+        "ISO 80000-4 (wielkości i jednostki: mechanika).",
+        "PN-EN 60034-1 — moc znamionowa silników elektrycznych podawana w W lub kW.",
+      ]}
+    />
+  </article>
+</Layout>

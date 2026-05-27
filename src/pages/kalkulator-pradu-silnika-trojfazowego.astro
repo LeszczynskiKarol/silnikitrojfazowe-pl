@@ -1,0 +1,95 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Formula from "../components/Formula.astro";
+import Sources from "../components/Sources.astro";
+import Limitations from "../components/Limitations.astro";
+import CurrentCalc from "../components/CurrentCalc";
+---
+<Layout
+  title="Kalkulator prądu znamionowego silnika trójfazowego (I = P / √3·U·cos φ·η)"
+  description="Oblicz prąd znamionowy silnika 3-fazowego z mocy, napięcia, cos φ i sprawności. Wzór, przykład, tabela orientacyjna dla mocy 0.37–200 kW."
+>
+  <article>
+    <div class="mb-6">
+      <div class="text-[12px] font-mono text-ink-400 mb-2">/ kalkulatory / prąd znamionowy</div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-ink-900 leading-tight mb-3">
+        Kalkulator prądu znamionowego silnika trójfazowego
+      </h1>
+      <p class="text-[15px] text-ink-600 leading-relaxed max-w-3xl">
+        Oblicza prąd znamionowy I<sub>n</sub> silnika klatkowego 3-fazowego na podstawie mocy na wale, napięcia
+        międzyfazowego, współczynnika mocy cos φ i sprawności η. Stosowany do doboru przewodów,
+        zabezpieczeń, falowników i przekaźników termicznych.
+      </p>
+    </div>
+
+    <CurrentCalc client:load />
+
+    <div class="prose-tech mt-10 max-w-3xl">
+      <h2>Wzór</h2>
+      <Formula label="Prąd znamionowy">
+        <span class="var">I</span> = <span class="var">P</span> / ( <span class="num">√3</span> <span class="op">·</span> <span class="var">U</span> <span class="op">·</span> <span class="var">cos φ</span> <span class="op">·</span> <span class="var">η</span> )
+      </Formula>
+
+      <p>
+        Wzór wynika bezpośrednio z bilansu mocy silnika 3-fazowego:
+        <code>P_mech = √3 · U · I · cos φ · η</code>. Lewa strona to moc mechaniczna oddawana
+        na wale (wartość z tabliczki znamionowej), prawa — moc czynna pobierana z sieci
+        razy sprawność.
+      </p>
+
+      <h3>Oznaczenia</h3>
+      <ul>
+        <li><strong>P</strong> — moc mechaniczna na wale [W]. UWAGA: na tabliczce silnika podaje się moc mechaniczną, nie elektryczną pobieraną z sieci.</li>
+        <li><strong>U</strong> — napięcie międzyfazowe (linia–linia) [V]. W Polsce sieć trójfazowa to 3×400 V (między fazami 400 V, faza–N 230 V).</li>
+        <li><strong>cos φ</strong> — współczynnik mocy, typowo 0.75–0.90 dla silników klatkowych.</li>
+        <li><strong>η</strong> — sprawność silnika. Klasy wg PN-EN 60034-30-1: IE1 (~0.78–0.85), IE2 (~0.83–0.90), IE3 (~0.87–0.93), IE4 (~0.90–0.96).</li>
+        <li><strong>√3</strong> ≈ 1.7320508 — współczynnik wynikający z relacji między napięciem międzyfazowym a fazowym w układzie symetrycznym 3-fazowym.</li>
+      </ul>
+
+      <h3>Przykład obliczeniowy</h3>
+      <p>
+        Silnik 7,5 kW, 400 V, cos φ = 0.85, η = 0.895 (typowy IE3):
+      </p>
+      <Formula>
+        <span class="var">I</span> = <span class="num">7500</span> / ( <span class="num">1.732</span> <span class="op">·</span> <span class="num">400</span> <span class="op">·</span> <span class="num">0.85</span> <span class="op">·</span> <span class="num">0.895</span> ) ≈ <span class="num">14.2</span> A
+      </Formula>
+
+      <h3>Do czego potrzebujesz tej wartości</h3>
+      <ul>
+        <li><strong>Dobór przekroju przewodu zasilającego</strong> — wg PN-IEC 60364-5-523, z uwzględnieniem sposobu układania i długości linii.</li>
+        <li><strong>Nastawa przekaźnika termicznego</strong> — ustawić na I<sub>n</sub> silnika (nie na prąd zabezpieczenia zwarciowego).</li>
+        <li><strong>Dobór falownika</strong> — falownik powinien mieć prąd znamionowy co najmniej równy I<sub>n</sub> silnika (zalecany margines 10–15%).</li>
+        <li><strong>Rozliczenie energii i kompensacja mocy biernej</strong>.</li>
+      </ul>
+    </div>
+
+    <Limitations
+      items={[
+        "Silnik jednofazowy 230 V — wzór nie ma w mianowniku √3. Użyj wzoru I = P / (U · cos φ · η).",
+        "Silnik prądu stałego — inne równania, bez cos φ i bez √3.",
+        "Praca przy częstotliwości innej niż znamionowa (np. z falownika) — moc i moment zmieniają się nieliniowo, wartości z tabliczki dotyczą tylko punktu nominalnego.",
+        "Rozruch i stany przejściowe — prąd rozruchu DOL wynosi 5–8 × I_n. Kalkulator podaje wartość pracy ciągłej, nie szczytową.",
+        "Silniki z bardzo dużym odchyleniem od pracy znamionowej (niedoobciążone < 50%) mają znacząco niższy cos φ — wartość rzeczywista różni się od katalogowej.",
+      ]}
+    />
+
+    <Sources
+      items={[
+        "PN-EN 60034-1 — Maszyny elektryczne wirujące. Dane znamionowe i parametry.",
+        "PN-EN 60034-30-1 — Klasyfikacja sprawności silników indukcyjnych (klasy IE1, IE2, IE3, IE4).",
+        "PN-IEC 60364-5-523 — Obciążalność prądowa długotrwała przewodów.",
+        "Z. Kostro, Maszyny elektryczne. WNT, Warszawa.",
+        "Katalogi: Cantoni Motor, ABB, Siemens, WEG — typowe wartości cos φ i η dla mocy 0.37–200 kW.",
+      ]}
+    />
+
+    <div class="mt-10 p-5 bg-ink-100 border border-ink-200 rounded-lg max-w-3xl">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-ink-500 mb-2">Powiązane kalkulatory</div>
+      <ul class="text-[13.5px] space-y-1.5">
+        <li><a href="/kalkulator-momentu-obrotowego/" class="text-accent hover:underline">Kalkulator momentu obrotowego z mocy i obrotów</a></li>
+        <li><a href="/dobor-zabezpieczen-silnika/" class="text-accent hover:underline">Dobór MCB, bezpiecznika i wyłącznika silnikowego</a></li>
+        <li><a href="/polaczenie-gwiazda-trojkat/" class="text-accent hover:underline">Połączenie gwiazda / trójkąt — co wybrać do sieci 400 V</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>

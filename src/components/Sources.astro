@@ -1,0 +1,16 @@
+---
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+<aside class="mt-10 p-5 bg-white border border-ink-200 rounded-lg">
+  <div class="text-[11px] font-semibold uppercase tracking-wider text-ink-400 mb-3">
+    Źródła i normy
+  </div>
+  <ul class="text-[13px] text-ink-600 space-y-1.5">
+    {items.map((s) => (
+      <li class="leading-relaxed">— {s}</li>
+    ))}
+  </ul>
+</aside>

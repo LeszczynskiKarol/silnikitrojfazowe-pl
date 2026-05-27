@@ -1,0 +1,196 @@
+---
+import Analytics from "../components/Analytics.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  noindex?: boolean;
+  h1?: string;
+}
+
+const {
+  title = "Kalkulatory silników trójfazowych — silnikitrojfazowe.pl",
+  description,
+  canonical,
+  noindex = false,
+} = Astro.props;
+
+const NAV = [
+  { href: "/kalkulator-pradu-silnika-trojfazowego/", label: "Prąd znamionowy" },
+  { href: "/kalkulator-momentu-obrotowego/", label: "Moment obrotowy" },
+  { href: "/kalkulator-obrotow-silnika/", label: "Obroty / bieguny" },
+  { href: "/polaczenie-gwiazda-trojkat/", label: "Gwiazda / trójkąt" },
+  { href: "/dobor-zabezpieczen-silnika/", label: "Dobór zabezpieczenia" },
+  { href: "/przelicznik-kw-km-hp/", label: "kW ↔ KM ↔ HP" },
+];
+
+const finalCanonical = canonical || `https://www.silnikitrojfazowe.pl${Astro.url.pathname}`;
+---
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  <link rel="canonical" href={finalCanonical} />
+  {noindex && <meta name="robots" content="noindex,follow" />}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="silnikitrojfazowe.pl" />
+  <meta property="og:locale" content="pl_PL" />
+  <meta property="og:title" content={title} />
+  {description && <meta property="og:description" content={description} />}
+  <meta property="og:url" content={finalCanonical} />
+  <meta property="og:image" content="https://www.silnikitrojfazowe.pl/og-default.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  {description && <meta name="twitter:description" content={description} />}
+  <meta name="twitter:image" content="https://www.silnikitrojfazowe.pl/og-default.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://www.silnikitrojfazowe.pl/",
+    "name": "silnikitrojfazowe.pl — kalkulatory silników trójfazowych",
+    "inLanguage": "pl-PL",
+    "publisher": {
+      "@type": "Organization",
+      "name": "silnikitrojfazowe.pl",
+      "url": "https://www.silnikitrojfazowe.pl/"
+    }
+  })} />
+
+  <Analytics />
+
+  <slot name="head" />
+</head>
+<body class="min-h-screen bg-ink-50 text-ink-800 font-sans antialiased">
+  <header class="border-b border-ink-200 bg-white">
+    <div class="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <svg viewBox="0 0 32 32" class="w-8 h-8" fill="none">
+          <rect width="32" height="32" rx="6" fill="#0f131a"/>
+          <circle cx="16" cy="16" r="9" stroke="#22d3ee" stroke-width="1.8" fill="none"/>
+          <circle cx="16" cy="16" r="2" fill="#22d3ee"/>
+          <path d="M7 16H3M29 16h-4M16 7V3M16 29v-4" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="font-mono text-[13px] font-semibold text-ink-900 tracking-tight">
+          silnikitrojfazowe<span class="text-accent">.pl</span>
+        </span>
+      </a>
+      <nav class="hidden md:flex items-center gap-1 text-[12.5px]">
+        <a href="/" class="px-2.5 py-1.5 rounded text-ink-500 hover:text-ink-900 hover:bg-ink-100">Wszystkie kalkulatory</a>
+        <a href="/o-projekcie/" class="px-2.5 py-1.5 rounded text-ink-500 hover:text-ink-900 hover:bg-ink-100">O projekcie</a>
+      </nav>
+    </div>
+    <div class="border-t border-ink-100 bg-ink-50/60">
+      <div class="max-w-6xl mx-auto px-5">
+        <div class="flex items-center gap-0.5 overflow-x-auto py-1.5 text-[12px] font-medium scrollbar-thin">
+          {NAV.map((item) => (
+            <a
+              href={item.href}
+              class={`px-2.5 py-1 rounded whitespace-nowrap transition ${
+                Astro.url.pathname === item.href
+                  ? "bg-ink-900 text-white"
+                  : "text-ink-500 hover:text-ink-900 hover:bg-white"
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-5 py-8 md:py-12">
+    <slot />
+  </main>
+
+  <footer class="mt-20 border-t border-ink-200 bg-white">
+    <div class="max-w-6xl mx-auto px-5 py-10 grid gap-8 md:grid-cols-3 text-[13px]">
+      <div>
+        <div class="font-mono text-[13px] font-semibold text-ink-900 mb-2">
+          silnikitrojfazowe<span class="text-accent">.pl</span>
+        </div>
+        <p class="text-ink-500 leading-relaxed">
+          Niezależne narzędzia obliczeniowe dla elektryków, automatyków i inżynierów.
+          Wzory oparte o normy PN-EN 60034, PN-EN 60898, PN-EN 60947 i literaturę przedmiotu.
+        </p>
+      </div>
+      <div>
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-400 mb-3">Kalkulatory</div>
+        <ul class="space-y-1.5">
+          {NAV.map((i) => (
+            <li><a href={i.href} class="text-ink-500 hover:text-ink-900">{i.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <div class="text-[10px] font-semibold uppercase tracking-wider text-ink-400 mb-3">Informacje</div>
+        <ul class="space-y-1.5">
+          <li><a href="/o-projekcie/" class="text-ink-500 hover:text-ink-900">O projekcie</a></li>
+          <li><a href="/kontakt/" class="text-ink-500 hover:text-ink-900">Kontakt</a></li>
+          <li><a href="/polityka-prywatnosci/" class="text-ink-500 hover:text-ink-900">Polityka prywatności</a></li>
+        </ul>
+        <div class="mt-5 text-[11px] text-ink-400 leading-relaxed border-t border-ink-100 pt-3">
+          Potrzebujesz silnika? Sprawdź ofertę na
+          {" "}<a href="https://silniki-elektryczne.com.pl" rel="external" class="text-accent hover:underline">silniki-elektryczne.com.pl</a>.
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-ink-100">
+      <div class="max-w-6xl mx-auto px-5 py-4 flex flex-wrap justify-between items-center gap-2 text-[11px] text-ink-400">
+        <span>© {new Date().getFullYear()} silnikitrojfazowe.pl — kalkulatory inżynierskie</span>
+        <span class="font-mono">v0.1</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style is:global>
+  html { scroll-behavior: smooth; }
+  .scrollbar-thin::-webkit-scrollbar { height: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #c0c6d2; border-radius: 2px; }
+
+  /* Formula box */
+  .formula {
+    font-family: 'JetBrains Mono', monospace;
+    background: #0f131a;
+    color: #e2e8f0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  .formula .var { color: #22d3ee; }
+  .formula .num { color: #f59e0b; }
+  .formula .op { color: #94a3b8; }
+
+  /* Prose for explanations */
+  .prose-tech h2 { font-size: 18px; font-weight: 600; color: #1a1f29; margin-top: 28px; margin-bottom: 10px; }
+  .prose-tech h3 { font-size: 15px; font-weight: 600; color: #2a313d; margin-top: 20px; margin-bottom: 8px; }
+  .prose-tech p { font-size: 14px; line-height: 1.7; color: #3e4654; margin-bottom: 12px; }
+  .prose-tech ul { font-size: 14px; line-height: 1.7; color: #3e4654; margin-bottom: 12px; padding-left: 20px; }
+  .prose-tech li { margin-bottom: 4px; list-style: disc; }
+  .prose-tech code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: #eef0f4; padding: 1px 6px; border-radius: 3px; color: #0e7490; }
+  .prose-tech strong { color: #1a1f29; font-weight: 600; }
+  .prose-tech a { color: #0891b2; text-decoration: underline; }
+</style>
+
+<CookieConsent />

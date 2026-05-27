@@ -1,0 +1,46 @@
+---
+// Consent Mode v2 + GA4. Renders only if siteConfig.features.ga4 is set.
+import { siteConfig } from "../config/site";
+const GA4 = siteConfig.features.ga4;
+---
+{GA4 && (
+  <>
+    <script is:inline define:vars={{ GA4 }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      // Consent Mode v2 — defaults DENIED, PL/EU region override DENIED
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+        security_storage: 'granted',
+        wait_for_update: 500,
+      });
+
+      // Restore from localStorage
+      try {
+        const saved = JSON.parse(localStorage.getItem('cc_consent_v1') || 'null');
+        if (saved && saved.analytics_storage) {
+          gtag('consent', 'update', {
+            analytics_storage: saved.analytics_storage,
+            ad_storage: saved.ad_storage || 'denied',
+            ad_user_data: saved.ad_user_data || 'denied',
+            ad_personalization: saved.ad_personalization || 'denied',
+          });
+        }
+      } catch (e) {}
+
+      gtag('config', GA4, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=Lax;Secure',
+      });
+    </script>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA4}`}></script>
+  </>
+)}

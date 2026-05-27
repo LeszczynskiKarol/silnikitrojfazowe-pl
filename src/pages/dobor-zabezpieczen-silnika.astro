@@ -1,0 +1,113 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Formula from "../components/Formula.astro";
+import Sources from "../components/Sources.astro";
+import Limitations from "../components/Limitations.astro";
+import ProtectionCalc from "../components/ProtectionCalc";
+---
+<Layout
+  title="Dobór zabezpieczenia silnika trójfazowego — MCB, bezpiecznik, wyłącznik silnikowy"
+  description="Jak dobrać MCB, bezpiecznik gG/aM i wyłącznik silnikowy MPCB do silnika 3-fazowego. Charakterystyki B/C/D, rozruch DOL, Y-Δ, soft-start, falownik."
+>
+  <article>
+    <div class="mb-6">
+      <div class="text-[12px] font-mono text-ink-400 mb-2">/ kalkulatory / dobór zabezpieczeń</div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-ink-900 leading-tight mb-3">
+        Dobór zabezpieczenia silnika trójfazowego
+      </h1>
+      <p class="text-[15px] text-ink-600 leading-relaxed max-w-3xl">
+        Zabezpieczenie silnika musi spełnić dwa cele: chronić przed zwarciem (zabezpieczenie zwarciowe —
+        MCB, bezpiecznik) i przed przeciążeniem (przekaźnik termiczny, MPCB). Kalkulator dobiera oba typy
+        z uwzględnieniem sposobu rozruchu.
+      </p>
+    </div>
+
+    <ProtectionCalc client:load />
+
+    <div class="prose-tech mt-10 max-w-3xl">
+      <h2>Co właściwie zabezpieczamy</h2>
+      <p>Silnik wymaga ochrony przed trzema niezależnymi zjawiskami:</p>
+      <ul>
+        <li><strong>Zwarciem</strong> — gwałtowny wzrost prądu (kilkadziesiąt–kilkaset I_n). Zabezpieczenie: MCB charakterystyki D, bezpiecznik aM, MPCB człon magnetyczny.</li>
+        <li><strong>Przeciążeniem ruchowym</strong> — utrzymujący się prąd 1.1–1.5 × I_n (zatarte łożysko, zła wentylacja, przepalona faza). Zabezpieczenie: przekaźnik termiczny, MPCB człon termiczny.</li>
+        <li><strong>Zanikiem fazy</strong> — utrata jednej fazy → silnik pracuje na dwóch, prąd w pozostałych rośnie do 1.7×, silnik się przegrzewa. Zabezpieczenie: trójfazowe przekaźniki z różniczkową detekcją faz, MPCB klasy "10A".</li>
+      </ul>
+
+      <h2>MCB — charakterystyki B / C / D</h2>
+      <Formula label="Człon magnetyczny MCB (PN-EN 60898-1)">
+        char. <span class="var">B</span> : <span class="num">3</span>–<span class="num">5</span> × I_n_MCB
+        <br/>char. <span class="var">C</span> : <span class="num">5</span>–<span class="num">10</span> × I_n_MCB
+        <br/>char. <span class="var">D</span> : <span class="num">10</span>–<span class="num">20</span> × I_n_MCB
+      </Formula>
+      <p>
+        Silnik klatkowy w rozruchu DOL pobiera 5–8 × I<sub>n</sub> silnika przez kilka sekund.
+        Jeśli wybierzemy MCB o prądzie ~1.25·I_n silnika i charakterystyce B (3–5×), wybije się
+        natychmiast po włączeniu. Charakterystyka <strong>C jest na granicy</strong>, <strong>D bezpieczna</strong>.
+      </p>
+      <p>
+        <strong>Reguła:</strong> dla rozruchu bezpośredniego dobierz MCB charakterystyki D o prądzie
+        ~1.25–1.5 × I_n silnika. Dla rozruchów łagodnych (Y-Δ, soft-start, VFD) wystarczy C.
+      </p>
+
+      <h2>Bezpieczniki gG vs aM</h2>
+      <ul>
+        <li><strong>gG</strong> — ogólnego przeznaczenia. Działanie w pełnym zakresie: od małych przeciążeń po zwarcia. Wybijają się przy rozruchu silnika, jeśli zbyt mały prąd.</li>
+        <li><strong>aM</strong> — do obwodów silnikowych ("a" — accompagnement, "M" — moteur). Działają tylko przy zwarciach (≥4×I_n), w zakresie przeciążeniowym milczą. Wymagają komplementarnego zabezpieczenia przeciążeniowego (przekaźnik termiczny).</li>
+      </ul>
+      <p>
+        Klasyczna konfiguracja w szafie sterowniczej: bezpieczniki <strong>aM</strong> (zwarciowe) + stycznik + przekaźnik termiczny.
+        Nowoczesna: <strong>MPCB</strong> (wyłącznik silnikowy) + stycznik. MPCB łączy oba zabezpieczenia w jednym aparacie.
+      </p>
+
+      <h2>Wyłącznik silnikowy (MPCB) — najlepszy wybór</h2>
+      <p>
+        Wyłącznik silnikowy (Motor Protective Circuit Breaker) wg PN-EN 60947-2 łączy w jednej obudowie:
+      </p>
+      <ul>
+        <li><strong>Człon termiczny</strong> regulowany w zakresie ok. 0.6–1.0 × I_n MPCB. Nastawiasz na prąd znamionowy silnika z tabliczki.</li>
+        <li><strong>Człon magnetyczny</strong> nastawiony fabrycznie na ~12·I_n MPCB — wytrzymuje rozruch DOL bez wybijania.</li>
+        <li><strong>Detekcja zaniku fazy</strong> (klasa "10A" lub wyższa).</li>
+      </ul>
+      <p>
+        Popularne typoszeregi: ABB MS, Eaton PKZM, Schneider GV2, Siemens 3RV.
+      </p>
+
+      <h2>Stycznik</h2>
+      <p>
+        Stycznik jest osobnym elementem (nie zabezpieczeniem) — służy do załączania i wyłączania silnika
+        przez sterowanie (sterownik PLC, przyciski). Dobór wg klasy użytkowania:
+      </p>
+      <ul>
+        <li><strong>AC-3</strong> — silniki klatkowe z rozruchem DOL, wyłączanie pod pełnym obciążeniem. Standard.</li>
+        <li><strong>AC-4</strong> — silniki z reverse, hamowanie prądem stałym, częste rozruchy. Stycznik o ~50% wyższym prądzie niż AC-3.</li>
+      </ul>
+    </div>
+
+    <Limitations
+      items={[
+        "Kalkulator nie zastępuje obliczeń projektowych instalacji wg PN-IEC 60364 ani uzgodnień z OSD.",
+        "Wartości przyjmują typowy silnik klatkowy o krotności prądu rozruchowego 6 × I_n. Dla silników 'twardych' (krotność > 7) lub o przedłużonym rozruchu — dobrać MCB większy / charakterystyka D.",
+        "Dla silników zasilanych z falownika zabezpieczenie zwarciowe i przeciążeniowe od strony silnika realizuje falownik. Po stronie sieci MCB chroni falownik, nie silnik.",
+        "Dla silników na napięcie SN (powyżej 1 kV) stosuje się inne aparaty — wyłączniki próżniowe lub SF6, zabezpieczenia cyfrowe (REF615, SEPAM).",
+      ]}
+    />
+
+    <Sources
+      items={[
+        "PN-EN 60898-1 — wyłączniki nadprądowe do instalacji domowych i podobnych.",
+        "PN-EN 60947-2 — wyłączniki niskonapięciowe (w tym MPCB).",
+        "PN-EN 60947-4-1 — styczniki i rozruszniki silników.",
+        "PN-HD 60364-5-52 — instalacje elektryczne, dobór i montaż osprzętu.",
+        "Markiewicz H., Bezpieczeństwo w elektroenergetyce. WNT.",
+      ]}
+    />
+
+    <div class="mt-10 p-5 bg-ink-100 border border-ink-200 rounded-lg max-w-3xl">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-ink-500 mb-2">Powiązane kalkulatory</div>
+      <ul class="text-[13.5px] space-y-1.5">
+        <li><a href="/kalkulator-pradu-silnika-trojfazowego/" class="text-accent hover:underline">Najpierw oblicz I_n silnika</a></li>
+        <li><a href="/polaczenie-gwiazda-trojkat/" class="text-accent hover:underline">Połączenie Y / Δ — wpływa na prąd rozruchu</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>

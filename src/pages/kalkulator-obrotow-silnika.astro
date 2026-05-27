@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Formula from "../components/Formula.astro";
+import Sources from "../components/Sources.astro";
+import Limitations from "../components/Limitations.astro";
+import SpeedCalc from "../components/SpeedCalc";
+---
+<Layout
+  title="Kalkulator obrotów silnika indukcyjnego (liczba biegunów, poślizg)"
+  description="Oblicz obroty synchroniczne i rzeczywiste silnika 3-fazowego z liczby biegunów, częstotliwości i poślizgu. Tabela 2/4/6/8 biegunów."
+>
+  <article>
+    <div class="mb-6">
+      <div class="text-[12px] font-mono text-ink-400 mb-2">/ kalkulatory / obroty silnika</div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-ink-900 leading-tight mb-3">
+        Kalkulator obrotów silnika — liczba biegunów i poślizg
+      </h1>
+      <p class="text-[15px] text-ink-600 leading-relaxed max-w-3xl">
+        Wyznacza obroty synchroniczne (prędkość pola wirującego) i obroty rzeczywiste wirnika silnika
+        indukcyjnego klatkowego. Stosowany do identyfikacji liczby biegunów na podstawie tabliczki,
+        oraz do oszacowania obrotów po zmianie częstotliwości (np. praca z falownikiem).
+      </p>
+    </div>
+
+    <SpeedCalc client:load />
+
+    <div class="prose-tech mt-10 max-w-3xl">
+      <h2>Wzór</h2>
+      <Formula label="Obroty synchroniczne">
+        <span class="var">n_sync</span> [obr/min] = <span class="num">60</span> <span class="op">·</span> <span class="var">f</span> [Hz] / <span class="var">p</span>
+      </Formula>
+      <Formula label="Obroty rzeczywiste (z poślizgiem)">
+        <span class="var">n</span> = <span class="var">n_sync</span> <span class="op">·</span> ( <span class="num">1</span> − <span class="var">s</span> )
+      </Formula>
+
+      <h3>Oznaczenia</h3>
+      <ul>
+        <li><strong>p</strong> — liczba <em>par</em> biegunów. UWAGA na nazewnictwo: producenci często piszą "liczba biegunów" mając na myśli pełną liczbę (2p). Para = N + S.</li>
+        <li><strong>f</strong> — częstotliwość zasilania [Hz]. W Polsce sieć ma 50 Hz; w USA 60 Hz; po falowniku — dowolna.</li>
+        <li><strong>s</strong> — poślizg (slip), bezwymiarowy. Definicja: <code>s = (n_sync − n) / n_sync</code>. Silnik klatkowy nigdy nie osiąga obrotów synchronicznych (musi być różnica, by w wirniku indukowało się napięcie).</li>
+      </ul>
+
+      <h3>Typowe wartości poślizgu</h3>
+      <ul>
+        <li>Silniki małej mocy (0.37–3 kW): s = 4–6%</li>
+        <li>Silniki średniej mocy (3–30 kW): s = 2–4%</li>
+        <li>Silniki dużej mocy (> 30 kW): s = 1–2%</li>
+        <li>Silniki o podwyższonym poślizgu (do napędu maszyn z udarami): s = 8–13%</li>
+      </ul>
+
+      <h3>Jak rozpoznać liczbę biegunów z tabliczki</h3>
+      <p>
+        Wystarczy spojrzeć na obroty znamionowe. Wartość bliska, ale niższa od:
+      </p>
+      <ul>
+        <li>3000 → 2 bieguny</li>
+        <li>1500 → 4 bieguny</li>
+        <li>1000 → 6 biegunów</li>
+        <li>750 → 8 biegunów</li>
+      </ul>
+      <p>Np. tabliczka 1450 obr/min → silnik 4-biegunowy (poślizg ≈ 3.3%).</p>
+
+      <h3>Praca z falownikiem</h3>
+      <p>
+        Falownik (VFD) zmienia częstotliwość, czyli zmieniają się obroty synchroniczne — wzór pozostaje
+        ten sam. Dla silnika 4-biegunowego z 25 Hz: <code>n_sync = 60 · 25 / 2 = 750 obr/min</code>.
+        Poślizg zachowuje się podobnie procentowo, więc rzeczywiste obroty są nieco niższe.
+      </p>
+      <p>
+        Powyżej częstotliwości znamionowej silnik wchodzi w obszar <strong>osłabienia pola</strong>
+        — moment maleje proporcjonalnie do 1/f, moc pozostaje stała. Wzór dla obrotów nadal działa,
+        ale ograniczeniem jest moc, nie częstotliwość.
+      </p>
+    </div>
+
+    <Limitations
+      items={[
+        "Wzór dotyczy silników indukcyjnych klatkowych. Silniki synchroniczne pracują dokładnie z obrotami synchronicznymi (s = 0).",
+        "Dla silników z magnesami trwałymi (PMSM, BLDC) — formalnie też pracują synchronicznie, kalkulator z poślizgiem nie ma zastosowania.",
+        "Powyżej znamionowej częstotliwości (osłabienie pola) — formalnie n_sync rośnie liniowo, ale moc i moment są ograniczone konstrukcyjnie.",
+        "Silniki 2-biegunowe powyżej ok. 3000 obr/min wymagają wzmocnionej konstrukcji wirnika (siły odśrodkowe).",
+      ]}
+    />
+
+    <Sources
+      items={[
+        "PN-EN 60034-1 — maszyny elektryczne wirujące, parametry znamionowe.",
+        "Latek W., Maszyny i napędy elektryczne — WNT.",
+        "Plamitzer A., Maszyny elektryczne — WNT.",
+      ]}
+    />
+  </article>
+</Layout>

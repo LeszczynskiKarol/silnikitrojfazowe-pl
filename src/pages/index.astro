@@ -1,0 +1,135 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const CALCS = [
+  {
+    href: "/kalkulator-pradu-silnika-trojfazowego/",
+    title: "Prąd znamionowy silnika",
+    formula: "I = P / (√3 · U · cos φ · η)",
+    desc: "Oblicza I_n z mocy, napięcia, cos φ i sprawności. Wartości orientacyjne dla mocy 0.37–200 kW.",
+    use: "Dobór przewodów, MCB, falownika, przekaźnika termicznego.",
+  },
+  {
+    href: "/kalkulator-momentu-obrotowego/",
+    title: "Moment obrotowy",
+    formula: "M [Nm] = 9550 · P [kW] / n [rpm]",
+    desc: "Konwersja w obie strony: moc ↔ moment przy znanych obrotach.",
+    use: "Dobór silnika do napędzanej maszyny, weryfikacja reduktora.",
+  },
+  {
+    href: "/kalkulator-obrotow-silnika/",
+    title: "Obroty / liczba biegunów",
+    formula: "n_sync = 60 · f / p",
+    desc: "Obroty synchroniczne i rzeczywiste (z poślizgiem). Tabela 2/4/6/8/10/12 biegunów.",
+    use: "Identyfikacja silnika z tabliczki, praca z falownikiem.",
+  },
+  {
+    href: "/polaczenie-gwiazda-trojkat/",
+    title: "Połączenie gwiazda / trójkąt",
+    formula: "U_uzw = U_linii / √3   (Y)",
+    desc: "Co wybrać do sieci 400 V dla danej tabliczki silnika? Z diagramem i wyjaśnieniem rozruchu Y-Δ.",
+    use: "Pierwsze uruchomienie silnika, modernizacja szafy.",
+  },
+  {
+    href: "/dobor-zabezpieczen-silnika/",
+    title: "Dobór zabezpieczenia",
+    formula: "I_MCB ≥ 1.25 · I_n  ;  char. D",
+    desc: "MCB charakterystyki B/C/D, bezpiecznik gG/aM, wyłącznik silnikowy MPCB. Uwzględnia sposób rozruchu.",
+    use: "Projekt szafy sterowniczej, modernizacja zabezpieczeń.",
+  },
+  {
+    href: "/przelicznik-kw-km-hp/",
+    title: "Przelicznik kW ↔ KM ↔ HP",
+    formula: "1 KM = 735.5 W ; 1 HP = 745.7 W",
+    desc: "Trzy jednostki, dwie różne definicje konia (metric vs mechanical). Tabela 0.37–110 kW.",
+    use: "Dobór silnika z katalogu amerykańskiego, dokumentacja techniczna.",
+  },
+];
+---
+<Layout
+  title="Kalkulatory silników trójfazowych — narzędzia inżynierskie | silnikitrojfazowe.pl"
+  description="Sześć kalkulatorów inżynierskich dla silników 3-fazowych: prąd znamionowy, moment obrotowy, obroty, połączenie Y/Δ, dobór zabezpieczeń, kW/KM/HP. Wzory, normy, ograniczenia."
+>
+  <section class="mb-12">
+    <div class="text-[12px] font-mono text-ink-400 mb-3">silnikitrojfazowe.pl</div>
+    <h1 class="text-3xl md:text-4xl font-semibold text-ink-900 leading-tight mb-4 max-w-3xl">
+      Kalkulatory inżynierskie do silników trójfazowych
+    </h1>
+    <p class="text-[15px] md:text-[16px] text-ink-600 leading-relaxed max-w-3xl">
+      Sześć rzetelnych narzędzi obliczeniowych dla elektryków, automatyków, projektantów i serwisantów.
+      Każdy kalkulator opiera się na wzorach zgodnych z polskimi normami (PN-EN 60034, PN-EN 60898,
+      PN-EN 60947) i pokazuje pełne wyprowadzenie — bez ukrywania założeń.
+    </p>
+  </section>
+
+  <section class="grid md:grid-cols-2 gap-5">
+    {CALCS.map((c) => (
+      <a
+        href={c.href}
+        class="group bg-white border border-ink-200 rounded-lg p-6 hover:border-accent hover:shadow-md transition"
+      >
+        <div class="font-mono text-[11.5px] text-ink-400 mb-2 group-hover:text-accent">{c.formula}</div>
+        <h2 class="text-[18px] font-semibold text-ink-900 mb-2 group-hover:text-accent-dark">{c.title}</h2>
+        <p class="text-[13.5px] text-ink-600 leading-relaxed mb-3">{c.desc}</p>
+        <div class="text-[12px] text-ink-500 leading-relaxed pt-3 border-t border-ink-100">
+          <span class="font-semibold text-ink-700">Zastosowanie:</span> {c.use}
+        </div>
+      </a>
+    ))}
+  </section>
+
+  <section class="mt-16 grid md:grid-cols-3 gap-5 max-w-5xl">
+    <div class="p-5 bg-white border border-ink-200 rounded-lg">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-accent-dark mb-2">Rzetelność</div>
+      <p class="text-[13.5px] text-ink-700 leading-relaxed">
+        Wszystkie wzory wyprowadzone, pokazane jednostki, podane założenia. Każdy kalkulator
+        ma sekcję "kiedy NIE używać" — bo dobre narzędzie wie o swoich ograniczeniach.
+      </p>
+    </div>
+    <div class="p-5 bg-white border border-ink-200 rounded-lg">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-accent-dark mb-2">Polskie normy</div>
+      <p class="text-[13.5px] text-ink-700 leading-relaxed">
+        Wzory zgodne z PN-EN 60034 (silniki), PN-EN 60898 (MCB), PN-EN 60947 (wyłączniki silnikowe),
+        PN-IEC 60364 (instalacje). Klasy sprawności wg IE1–IE4.
+      </p>
+    </div>
+    <div class="p-5 bg-white border border-ink-200 rounded-lg">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-accent-dark mb-2">Bez nachalnej reklamy</div>
+      <p class="text-[13.5px] text-ink-700 leading-relaxed">
+        Strona nie zbiera danych, nie wymaga rejestracji, nie ma popupów. Jeśli potrzebujesz kupić silnik,
+        polecamy <a href="https://silniki-elektryczne.com.pl" rel="external" class="text-accent hover:underline">silniki-elektryczne.com.pl</a> —
+        ale kalkulatory służą obliczeniom, nie sprzedaży.
+      </p>
+    </div>
+  </section>
+
+  <section class="mt-16 max-w-3xl">
+    <h2 class="text-xl font-semibold text-ink-900 mb-4">Dla kogo to narzędzie</h2>
+    <div class="grid md:grid-cols-2 gap-4 text-[14px] text-ink-700">
+      <div class="p-4 bg-white border border-ink-200 rounded">
+        <strong class="text-ink-900">Elektryk wykonawca</strong>
+        <p class="mt-1 text-[13px] text-ink-600 leading-relaxed">
+          Dobierzesz MCB, przekrój przewodu i nastawę przekaźnika dla podanego silnika.
+        </p>
+      </div>
+      <div class="p-4 bg-white border border-ink-200 rounded">
+        <strong class="text-ink-900">Automatyk / utrzymanie ruchu</strong>
+        <p class="mt-1 text-[13px] text-ink-600 leading-relaxed">
+          Zweryfikujesz tabliczkę silnika, dobierzesz falownik, oszacujesz moment dla obciążenia.
+        </p>
+      </div>
+      <div class="p-4 bg-white border border-ink-200 rounded">
+        <strong class="text-ink-900">Projektant</strong>
+        <p class="mt-1 text-[13px] text-ink-600 leading-relaxed">
+          Szybkie szacowania w fazie koncepcyjnej — moc, moment, zabezpieczenia, układ połączeń.
+        </p>
+      </div>
+      <div class="p-4 bg-white border border-ink-200 rounded">
+        <strong class="text-ink-900">Student / hobbysta</strong>
+        <p class="mt-1 text-[13px] text-ink-600 leading-relaxed">
+          Każdy wzór jest pokazany i wyprowadzony — narzędzie służy też do nauki, nie tylko do liczenia.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

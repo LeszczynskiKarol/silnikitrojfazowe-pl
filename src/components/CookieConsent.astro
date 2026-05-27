@@ -1,0 +1,62 @@
+---
+import { siteConfig } from "../config/site";
+const HAS_GA = !!siteConfig.features.ga4;
+---
+{HAS_GA && (
+  <>
+    <div id="cookie-banner" class="cookie-banner" hidden>
+      <div class="cookie-banner-inner">
+        <div class="cookie-banner-text">
+          <strong>Pliki cookie</strong> — strona używa analityki (Google Analytics 4) do
+          mierzenia odwiedzin. Dane są anonimizowane. Możesz wyrazić zgodę albo odmówić.
+          Więcej w <a href="/polityka-prywatnosci/">polityce prywatności</a>.
+        </div>
+        <div class="cookie-banner-actions">
+          <button type="button" id="cc-deny" class="cc-btn cc-btn-secondary">Odmawiam</button>
+          <button type="button" id="cc-accept" class="cc-btn cc-btn-primary">Zgadzam się</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" id="cookie-settings-btn" class="cookie-settings-btn" aria-label="Ustawienia cookie">⚙</button>
+
+    <script is:inline>
+      (function () {
+        const KEY = 'cc_consent_v1';
+        const banner = document.getElementById('cookie-banner');
+        const btn = document.getElementById('cookie-settings-btn');
+        const accept = document.getElementById('cc-accept');
+        const deny = document.getElementById('cc-deny');
+        if (!banner) return;
+        const saved = (() => { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { return null; } })();
+        if (!saved) banner.hidden = false;
+
+        function setConsent(v) {
+          const state = v
+            ? { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' }
+            : { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' };
+          localStorage.setItem(KEY, JSON.stringify(state));
+          if (window.gtag) window.gtag('consent', 'update', state);
+          banner.hidden = true;
+        }
+        accept.addEventListener('click', () => setConsent(true));
+        deny.addEventListener('click', () => setConsent(false));
+        btn.addEventListener('click', () => { banner.hidden = false; });
+      })();
+    </script>
+
+    <style>
+      .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #0f131a; color: #e2e8f0; border-top: 1px solid #22d3ee; box-shadow: 0 -4px 20px rgba(0,0,0,0.3); }
+      .cookie-banner-inner { max-width: 1280px; margin: 0 auto; padding: 16px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+      .cookie-banner-text { font-size: 13px; line-height: 1.6; max-width: 720px; }
+      .cookie-banner-text a { color: #22d3ee; text-decoration: underline; }
+      .cookie-banner-actions { display: flex; gap: 8px; }
+      .cc-btn { font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+      .cc-btn-primary { background: #22d3ee; color: #0f131a; }
+      .cc-btn-primary:hover { background: #67e8f9; }
+      .cc-btn-secondary { background: transparent; color: #cbd5e1; border-color: #475569; }
+      .cc-btn-secondary:hover { background: #1e293b; }
+      .cookie-settings-btn { position: fixed; bottom: 16px; left: 16px; z-index: 9998; width: 36px; height: 36px; border-radius: 50%; background: rgba(15,19,26,0.85); color: #94a3b8; border: 1px solid #2a313d; cursor: pointer; font-size: 16px; }
+      .cookie-settings-btn:hover { color: #22d3ee; border-color: #22d3ee; }
+    </style>
+  </>
+)}

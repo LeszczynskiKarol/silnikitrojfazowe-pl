@@ -1,0 +1,95 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Formula from "../components/Formula.astro";
+import Sources from "../components/Sources.astro";
+import Limitations from "../components/Limitations.astro";
+import TorqueCalc from "../components/TorqueCalc";
+---
+<Layout
+  title="Kalkulator momentu obrotowego silnika (M = 9550 · P / n)"
+  description="Oblicz moment obrotowy silnika z mocy i obrotów lub odwrotnie. Wzór, przykład, jednostki Nm i kgm."
+>
+  <article>
+    <div class="mb-6">
+      <div class="text-[12px] font-mono text-ink-400 mb-2">/ kalkulatory / moment obrotowy</div>
+      <h1 class="text-2xl md:text-3xl font-semibold text-ink-900 leading-tight mb-3">
+        Kalkulator momentu obrotowego silnika
+      </h1>
+      <p class="text-[15px] text-ink-600 leading-relaxed max-w-3xl">
+        Przelicza w obie strony pomiędzy mocą [kW] a momentem obrotowym [Nm] przy znanej prędkości obrotowej.
+        Stosowany do doboru silnika do napędzanej maszyny (pompa, sprężarka, przenośnik, wciągarka)
+        oraz do weryfikacji parametrów reduktora.
+      </p>
+    </div>
+
+    <TorqueCalc client:load />
+
+    <div class="prose-tech mt-10 max-w-3xl">
+      <h2>Wzór</h2>
+      <Formula label="Moment obrotowy z mocy i obrotów">
+        <span class="var">M</span> [Nm] = <span class="num">9549.3</span> <span class="op">·</span> <span class="var">P</span> [kW] / <span class="var">n</span> [obr/min]
+      </Formula>
+
+      <p>
+        Wyprowadzenie: moc obrotowa <code>P = M · ω</code>, gdzie <code>ω = 2π·n/60</code> [rad/s].
+        Po podstawieniu i przeliczeniu jednostek (kW i obr/min) otrzymujemy stałą
+        <code>60 000 / (2π) ≈ 9549.296</code>. W praktyce stosuje się zaokrąglenie <strong>9550</strong>
+        — błąd na czwartej cyfrze znaczącej.
+      </p>
+
+      <h3>Przykład</h3>
+      <p>
+        Silnik 7,5 kW przy obrotach znamionowych 1450 obr/min:
+      </p>
+      <Formula>
+        <span class="var">M</span> = <span class="num">9549.3</span> <span class="op">·</span> <span class="num">7.5</span> / <span class="num">1450</span> ≈ <span class="num">49.4</span> Nm
+      </Formula>
+
+      <h3>Moment znamionowy vs rozruchowy vs maksymalny</h3>
+      <p>
+        Kalkulator liczy moment <strong>znamionowy</strong> (w punkcie pracy ciągłej). Silnik klatkowy ma
+        ponadto:
+      </p>
+      <ul>
+        <li><strong>Moment rozruchowy M<sub>r</sub></strong> — przy n=0; typowo 1.8–3.0 × M_n (silniki ogólnego zastosowania).</li>
+        <li><strong>Moment maksymalny (krytyczny) M<sub>max</sub></strong> — punkt przeciągnięcia; typowo 2.0–3.5 × M_n.</li>
+        <li><strong>Moment minimalny w rozruchu (siodło)</strong> — często 0.7–1.0 × M_n; istotne dla maszyn z dużą bezwładnością.</li>
+      </ul>
+      <p>
+        Konkretne wartości dla danego typoszeregu podawane są w katalogu producenta (np. Cantoni — krzywe M(n), wskaźniki M<sub>r</sub>/M<sub>n</sub>, M<sub>max</sub>/M<sub>n</sub>).
+      </p>
+
+      <h3>Inne jednostki</h3>
+      <ul>
+        <li>1 Nm = 0.10197 kgm (kilogramometr) = 0.7376 lb·ft</li>
+        <li>Stary wzór z czasów PRL: <code>M [kgm] ≈ 974 · P [kW] / n [obr/min]</code></li>
+      </ul>
+    </div>
+
+    <Limitations
+      items={[
+        "Kalkulator dotyczy momentu w punkcie pracy znamionowej. Dla pełnej charakterystyki M(n) potrzebujesz danych z katalogu producenta.",
+        "Dla napędu falownikowego moment przy obniżonej częstotliwości może być niższy (osłabienie pola, ograniczenie chłodzenia).",
+        "Dla reduktorów: na wyjściu reduktora moment jest większy o przełożenie i (M_out = M_in · i · η_red), obroty mniejsze o przełożenie.",
+        "Dla silników o bardzo niskich obrotach (< 100 obr/min) moment może być limitowany konstrukcyjnie, niezależnie od mocy.",
+      ]}
+    />
+
+    <Sources
+      items={[
+        "PN-EN 60034-1 — parametry znamionowe maszyn wirujących.",
+        "Kostro Z., Maszyny elektryczne — WNT.",
+        "Katalogi techniczne: Cantoni Motor, SEW-Eurodrive, ABB.",
+      ]}
+    />
+
+    <div class="mt-10 p-5 bg-ink-100 border border-ink-200 rounded-lg max-w-3xl">
+      <div class="text-[11px] font-semibold uppercase tracking-wider text-ink-500 mb-2">Powiązane kalkulatory</div>
+      <ul class="text-[13.5px] space-y-1.5">
+        <li><a href="/kalkulator-obrotow-silnika/" class="text-accent hover:underline">Obroty silnika z liczby biegunów (poślizg)</a></li>
+        <li><a href="/kalkulator-pradu-silnika-trojfazowego/" class="text-accent hover:underline">Prąd znamionowy silnika 3-fazowego</a></li>
+        <li><a href="/przelicznik-kw-km-hp/" class="text-accent hover:underline">Przelicznik kW ↔ KM ↔ HP</a></li>
+      </ul>
+    </div>
+  </article>
+</Layout>

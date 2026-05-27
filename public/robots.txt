@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /kontakt/
+Disallow: /polityka-prywatnosci/
+
+Sitemap: https://www.silnikitrojfazowe.pl/sitemap-index.xml

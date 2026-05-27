@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout
+  title="O projekcie — silnikitrojfazowe.pl"
+  description="Skąd ten projekt i dlaczego rzetelność wzorów dla silników trójfazowych jest ważna."
+>
+  <article class="max-w-3xl">
+    <div class="text-[12px] font-mono text-ink-400 mb-2">/ o projekcie</div>
+    <h1 class="text-2xl md:text-3xl font-semibold text-ink-900 mb-6">O projekcie</h1>
+
+    <div class="prose-tech">
+      <h2>Po co kolejny kalkulator</h2>
+      <p>
+        W sieci jest sporo kalkulatorów silników. Większość z nich ma jeden lub kilka problemów:
+        nie pokazuje wzorów, miesza KM z HP, używa nierealistycznych wartości domyślnych, nie
+        ostrzega o przypadkach gdzie wzór się nie stosuje, albo otoczona jest reklamami tak gęsto,
+        że trudno znaleźć pole do wpisywania.
+      </p>
+      <p>
+        Ten projekt jest próbą zrobienia tego inaczej: <strong>jeden cel — policzyć dobrze i wytłumaczyć</strong>.
+        Każdy kalkulator pokazuje wzór, podaje jednostki, ma sekcję z ograniczeniami i powołuje się na normy.
+      </p>
+
+      <h2>Założenia techniczne</h2>
+      <ul>
+        <li>Strona statyczna (Astro). Brak śledzenia, brak ciastek, brak skryptów analitycznych.</li>
+        <li>Wzory wydzielone do jednej biblioteki — jedno źródło prawdy.</li>
+        <li>Wartości orientacyjne (cos φ, η) pochodzą z katalogów Cantoni, ABB, Siemens, WEG dla silników klasy IE3.</li>
+        <li>Wszystkie obliczenia odbywają się lokalnie w przeglądarce — żadne dane nie są wysyłane na serwer.</li>
+      </ul>
+
+      <h2>Czego tu nie ma (jeszcze)</h2>
+      <ul>
+        <li>Doboru przekroju przewodu — to wymaga uwzględnienia długości, sposobu układania, temperatury, spadku napięcia.
+            Planowane w wersji v0.2.</li>
+        <li>Kondensatora do pracy silnika 3-fazowego z sieci 1-fazowej (rozwiązanie Steinmetza).</li>
+        <li>Doboru hamulca elektromagnetycznego do silnika.</li>
+        <li>Charakterystyk M(n) konkretnych silników z katalogów — to dane producentów.</li>
+      </ul>
+
+      <h2>Zauważyłeś błąd?</h2>
+      <p>
+        Wzory były weryfikowane wielokrotnie wobec literatury i norm. Jeśli mimo to widzisz pomyłkę
+        — daj znać przez <a href="/kontakt/">stronę kontakt</a>. Każde zgłoszenie jest sprawdzane.
+      </p>
+
+      <h2>Powiązany sklep</h2>
+      <p>
+        Jeśli kalkulator pokazał, że potrzebujesz silnika konkretnej mocy, polecamy sklep
+        {" "}<a href="https://silniki-elektryczne.com.pl" rel="external">silniki-elektryczne.com.pl</a>
+        — szeroka oferta silników trójfazowych, jednofazowych, z hamulcem i motoreduktorów.
+        Nie ma jednak technicznego powiązania między tym narzędziem a sklepem; kalkulator został
+        zaprojektowany tak, by jego wynik był wiarygodny niezależnie od miejsca, w którym ostatecznie kupisz silnik.
+      </p>
+    </div>
+  </article>
+</Layout>
