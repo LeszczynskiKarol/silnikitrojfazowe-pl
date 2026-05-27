@@ -120,9 +120,9 @@
 
 - [ ] **Sprawdź PSI ręcznie**: https://pagespeed.web.dev/?url=https%3A%2F%2Fwww.silnikitrojfazowe.pl — jeśli mobile <90 lub desktop <95, popraw konkretne metryki (LCP, CLS, TBT). Astro static + Tailwind 3 + 1 React island na stronę powinien dawać 95+ na desktop bez problemu.
 
-- [ ] **Google Search Console** — dodaj `sc-domain:silnikitrojfazowe.pl` przez SA `google-index-api@ageless-period-491209-s8`. Po dodaniu wyślij sitemap: `https://www.silnikitrojfazowe.pl/sitemap-index.xml`.
+- [x] **Google Search Console** — dodane jako `sc-domain:silnikitrojfazowe.pl`, zweryfikowane DNS_TXT, sitemap submitted (2026-05-27 11:51 UTC, isPending=True czeka na pierwszy crawl Googlebota). SA `google-index-api@…` ma `siteOwner`. **TXT `google-site-verification=ks2La4fhUL...` MUSI ZOSTAĆ w Route53 na zawsze** (GSC robi okresowy re-check własności).
 
-- [ ] **seo_panel** — domena nie ma jeszcze wpisu w `seo_panel.Domain`. Po założeniu wpisu (przez panel UI lub SQL), dorzucić `DomainIntegration` GOOGLE_ANALYTICS z `propertyId = properties/539285247`.
+- [x] **seo_panel** — wpis dodany do prod (`panel` VPS) `Domain` (id=`cmc18ab1bfad1defcc422aa5`, category=SATELLITE, linkGroup=MOTORS, linkRole=SATELLITE) + `DomainIntegration` GOOGLE_ANALYTICS (`properties/539285247`, status=ACTIVE).
 
 - [ ] **Anti-PBN follow-up**: nie linkuj z `silniki-elektryczne.com.pl` ani z `silniki-trojfazowe.pl` do tej strony w pierwszych 2-3 miesiącach. Niech zarobi własny autorytet z naturalnych linków (np. wzmianka kalkulatora na elektroda.pl gdy ktoś zada pytanie "jak dobrać silnik"). Jeden cross-link z silnikitrojfazowe.pl → silniki-elektryczne.com.pl jest OK (mam w stopce i o-projekcie), w drugą stronę — pas.
 
