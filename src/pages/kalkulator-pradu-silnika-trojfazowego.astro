@@ -6,8 +6,12 @@ import Limitations from "../components/Limitations.astro";
 import CurrentCalc from "../components/CurrentCalc";
 ---
 <Layout
-  title="Kalkulator prądu znamionowego silnika trójfazowego (I = P / √3·U·cos φ·η)"
+  title="Kalkulator prądu znamionowego silnika trójfazowego"
   description="Oblicz prąd znamionowy silnika 3-fazowego z mocy, napięcia, cos φ i sprawności. Wzór, przykład, tabela orientacyjna dla mocy 0.37–200 kW."
+  breadcrumbs={[
+    { name: "Strona główna", url: "https://www.silnikitrojfazowe.pl/" },
+    { name: "Prąd znamionowy silnika", url: "https://www.silnikitrojfazowe.pl/kalkulator-pradu-silnika-trojfazowego/" },
+  ]}
 >
   <article>
     <div class="mb-6">

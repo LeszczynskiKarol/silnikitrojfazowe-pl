@@ -1,13 +1,22 @@
 ---
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/jetbrains-mono/600.css";
 import Analytics from "../components/Analytics.astro";
 import CookieConsent from "../components/CookieConsent.astro";
 
+interface Crumb { name: string; url: string }
 interface Props {
   title?: string;
   description?: string;
   canonical?: string;
   noindex?: boolean;
   h1?: string;
+  breadcrumbs?: Crumb[];
 }
 
 const {
@@ -15,6 +24,7 @@ const {
   description,
   canonical,
   noindex = false,
+  breadcrumbs,
 } = Astro.props;
 
 const NAV = [
@@ -53,13 +63,6 @@ const finalCanonical = canonical || `https://www.silnikitrojfazowe.pl${Astro.url
   {description && <meta name="twitter:description" content={description} />}
   <meta name="twitter:image" content="https://www.silnikitrojfazowe.pl/og-default.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
-
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -72,6 +75,19 @@ const finalCanonical = canonical || `https://www.silnikitrojfazowe.pl${Astro.url
       "url": "https://www.silnikitrojfazowe.pl/"
     }
   })} />
+
+  {breadcrumbs && breadcrumbs.length > 1 && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbs.map((c, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "name": c.name,
+        "item": c.url,
+      })),
+    })} />
+  )}
 
   <Analytics />
 
@@ -148,7 +164,7 @@ const finalCanonical = canonical || `https://www.silnikitrojfazowe.pl${Astro.url
         </ul>
         <div class="mt-5 text-[11px] text-ink-400 leading-relaxed border-t border-ink-100 pt-3">
           Potrzebujesz silnika? Sprawdź ofertę na
-          {" "}<a href="https://silniki-elektryczne.com.pl" rel="external" class="text-accent hover:underline">silniki-elektryczne.com.pl</a>.
+          {" "}<a href="https://silniki-elektryczne.com.pl" rel="external nofollow noopener" class="text-accent hover:underline">silniki-elektryczne.com.pl</a>.
         </div>
       </div>
     </div>
